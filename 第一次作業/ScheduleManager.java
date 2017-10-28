@@ -1,44 +1,39 @@
-package com.senao;
+package com.senao.homework1;
 
 import java.io.FileReader;
 
-import org.json.JSONObject;
-import org.json.simple.parser.JSONParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ScheduleManager {
 
-	public static Object obj;
+	// 排程檔內資訊
+	public static Schedule schedules;
 
+	// 排程檔筆數
 	public static int count;
 
 	public static void main(String[] args) {
-		ScheduleManager schedules = new ScheduleManager();
-		schedules.processSchedule();
-		System.out.println("Schedule rows=" + count);
+		ScheduleManager scheduleManager = new ScheduleManager();
+		scheduleManager.ProcessJsonConfig();
 	}
 
-	private void processSchedule() {
-		JSONParser parser = new JSONParser();
+	public void ProcessJsonConfig() {
+		ObjectMapper mapper = new ObjectMapper();
 
 		try {
-			// 取Config
-			obj = parser.parse(new FileReader("setting\\schedule.json"));
+			// 讀檔
+			schedules = mapper.readValue(new FileReader("setting\\schedule.json"), Schedule.class);
 
-			// 轉換成JSON
-			JSONObject json = new JSONObject(obj.toString());
+			// 筆數
+			count = schedules.getSchedules().size();
 
-			// 取得設定檔筆數
-			count = json.getJSONArray("schedules").length();
-
-			// 取得所有資料
 			for (int i = 0; i < count; i++) {
-				JSONObject jsonDetails = new JSONObject(json.getJSONArray("schedules").getJSONObject(i).toString());
 
-				Schedule schedules = new Schedule();
-				schedules.setExt(jsonDetails.get("ext").toString());
-				schedules.setTime(jsonDetails.get("time").toString());
-				schedules.setInterval(jsonDetails.get("interval").toString());
+				System.out.println("設定檔" + (i + 1) + ":" + schedules.getSchedules().get(i).getInterval());
+
 			}
+
+			System.out.println("Schedule 筆數共:" + count);
 
 		} catch (Exception e) {
 			e.printStackTrace();

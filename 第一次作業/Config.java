@@ -1,7 +1,14 @@
-package com.senao;
+package com.senao.homework1;
+
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Config {
-
+	
+	@JsonProperty("configs")
+	public List<Config> configs;
+	
 	public String ext;
 	public boolean subDirectory;
 	public String location;
@@ -12,21 +19,13 @@ public class Config {
 	public String dir;
 	public String connectionString;
 
-	public Config() {
 
+	public List<Config> getConfigs() {
+		return configs;
 	}
 
-	public Config(String connectionString, String destination, String dir, String ext, String handler, String location,
-			Boolean remove, Boolean subDirectory, String unit) {
-		this.connectionString = connectionString;
-		this.destination = destination;
-		this.dir = dir;
-		this.ext = ext;
-		this.handler = handler;
-		this.location = location;
-		this.remove = remove;
-		this.subDirectory = subDirectory;
-		this.unit = unit;
+	public void setConfigs(List<Config> configs) {
+		this.configs = configs;
 	}
 
 	/**

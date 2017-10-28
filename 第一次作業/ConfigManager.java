@@ -1,54 +1,40 @@
-package com.senao;
+package com.senao.homework1;
 
 import java.io.FileReader;
 
-import org.json.JSONObject;
-import org.json.simple.parser.JSONParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ConfigManager {
 
-	public static Object obj;
+	// 設定檔內資訊
+	public static Config configs;
 
+	// 設定檔筆數
 	public static int count;
 
 	public static void main(String[] args) {
-		ConfigManager configs = new ConfigManager();
-		configs.processConfigs();
-		System.out.println("Config rows=" + count);
+		ConfigManager configManger = new ConfigManager();
+		configManger.ProcessJsonConfig();
 	}
 
-	/**
-	 * 將 config.json 轉成 List<Config>
-	 */
-	public void processConfigs() {
+	public void ProcessJsonConfig() {
 
-		JSONParser parser = new JSONParser();
+		ObjectMapper mapper = new ObjectMapper();
 
 		try {
-			// 取Config
-			obj = parser.parse(new FileReader("setting\\config.json"));
+			// 讀檔
+			configs = mapper.readValue(new FileReader("setting\\config.json"), Config.class);
 
-			// 轉換成JSON
-			JSONObject json = new JSONObject(obj.toString());
+			// 筆數
+			count = configs.getConfigs().size();
 
-			// 取得設定檔筆數
-			count = json.getJSONArray("configs").length();
-
-			// 取得所有資料
 			for (int i = 0; i < count; i++) {
-				JSONObject jsonDetails = new JSONObject(json.getJSONArray("configs").getJSONObject(i).toString());
 
-				Config configs = new Config();
-				configs.setExt(jsonDetails.get("ext").toString());
-				configs.setSubDirectory((boolean) jsonDetails.get("subDirectory"));
-				configs.setLocation(jsonDetails.get("location").toString());
-				configs.setUnit(jsonDetails.get("unit").toString());
-				configs.setRemove((boolean) jsonDetails.get("remove"));
-				configs.setHandler(jsonDetails.get("handler").toString());
-				configs.setDestination(jsonDetails.get("destination").toString());
-				configs.setDir(jsonDetails.get("dir").toString());
-				configs.setConnectionString(jsonDetails.get("connectionString").toString());
+				System.out.println("設定檔" + (i + 1) + ":" + configs.getConfigs().get(i).getDir());
+
 			}
+
+			System.out.println("Config 筆數共:" + count);
 
 		} catch (Exception e) {
 			e.printStackTrace();

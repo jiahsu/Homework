@@ -1,19 +1,24 @@
-package com.senao;
+package com.senao.homework1;
+
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Schedule {
+
+	@JsonProperty("schedules")
+	public List<Schedule> schedules;
 
 	public String ext;
 	public String time;
 	public String interval;
 
-	public Schedule() {
-
+	public List<Schedule> getSchedules() {
+		return schedules;
 	}
 
-	public Schedule(String ext, String time, String interval) {
-		this.ext = ext;
-		this.time = time;
-		this.interval = interval;
+	public void setSchedules(List<Schedule> schedules) {
+		this.schedules = schedules;
 	}
 
 	/**
